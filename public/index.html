@@ -5,90 +5,41 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Zen Verse Flip vol.1 - 詩の世界を3 Piで解放" />
+    <meta name="description" content="Zen Verse Flip vol.1" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Zen Verse Flip vol.1</title>
   </head>
   <body>
-    <!-- 3 Pi 購入ボタン（Reactの上に表示） -->
-    <div style="text-align:center; margin:50px auto; max-width:400px;">
-      <button 
-        onclick="buyApp()" 
-        style="
-          padding:18px 36px; 
-          font-size:20px; 
-          background:#f0a500; 
-          color:white; 
-          border:none; 
-          border-radius:12px; 
-          box-shadow:0 4px 8px rgba(0,0,0,0.2);
-          cursor:pointer;
-        ">
+    <!-- 決済ボタン -->
+    <div style="text-align:center; margin:100px;">
+      <button onclick="buyApp()" style="padding:20px 40px; font-size:24px; background:#f0a500; color:white; border:none; border-radius:12px;">
         3 Pi で全機能解放
       </button>
-      <p style="margin-top:15px; font-size:14px; color:#666;">
-        購入後、詩の世界がフルオープン！
-      </p>
     </div>
 
- <!-- Pi SDK -->
-<script src="https://sdk.minepi.com/v2/pi-sdk.js"></script>
-<script>
-  // Pi SDK 初期化（DOM ロードで実行）
-  document.addEventListener('DOMContentLoaded', function() {
-    if (window.Pi) {
-      window.Pi.init({
-        version: "2.0",
-        sandbox: false,  // Testnet でも false で安定
-        redirectURI: "pi://kotobabitoverse"  // 君の Subdomain に合わせる
-      }).then(() => {
-        console.log("Pi SDK initialized!");
-      }).catch((error) => {
-        console.error("Pi SDK init error:", error);
+    <!-- Pi SDK -->
+    <script src="https://sdk.minepi.com/v2/pi-sdk.js"></script>
+    <script>
+    function buyApp() {
+      if (!window.Pi) {
+        alert("Pi Browser で開いてください");
+        return;
+      }
+      window.Pi.createPayment({
+        amount: 3.0,
+        memo: "Test Payment",
+        metadata: { developer: "Yuki36963" }
+      }, {
+        onReadyForServerCompletion: () => {
+          alert("テスト決済成功！");
+          location.reload();
+        }
       });
-    } else {
-      console.error("Pi SDK not loaded");
     }
-  });
+    </script>
 
-  function buyApp() {
-    if (!window.Pi) {
-      alert("Pi SDK が読み込まれていません。Pi Browser で開いてリロードしてください。");
-      return;
-    }
-    window.Pi.createPayment({
-      amount: 3.0,
-      memo: "Zen Verse Flip vol.1 - Full Access",
-      metadata: { 
-        developer: "Yuki36963",
-        app: "kotobabitoverse"
-      }
-    }, {
-      onReadyForServerApproval: (paymentId) => {
-        console.log("Payment ID:", paymentId);
-      },
-      onReadyForServerCompletion: (paymentId, txid) => {
-        alert("購入完了！全機能が解放されました！🎉");
-        localStorage.setItem("premium_unlocked", "true");
-        location.reload();
-      },
-      onCancel: () => {
-        alert("キャンセルされました");
-      },
-      onError: (error) => {
-        alert("エラー: " + error.message);
-      }
-    });
-  }
-</script>
-
-    <!-- React アプリ本体 -->
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>You need to enable JavaScript.</noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      The build step will place the bundled scripts into the <body> tag.
-    -->
   </body>
 </html>
