@@ -32,40 +32,53 @@
       </p>
     </div>
 
-    <!-- Pi SDK -->
-    <script src="https://sdk.minepi.com/v2/pi-sdk.js"></script>
-    <script>
-    function buyApp() {
-      if (!window.Pi) {
-        alert("Pi SDK が読み込まれていません。リロードしてください。");
-        return;
-      }
-      window.Pi.createPayment({
-        amount: 3.0,
-        memo: "Zen Verse Flip vol.1 - Full Access",
-        metadata: { 
-          developer: "Yuki36963",
-         625: "kotobabitoverse"
-        }
-      }, {
-        onReadyForServerApproval: (paymentId) => {
-          console.log("Payment ID:", paymentId);
-        },
-        onReadyForServerCompletion: (paymentId, txid) => {
-          alert("購入完了！全機能が解放されました！🎉");
-          // ここにアプリ解放処理（例: ローカル保存）
-          localStorage.setItem("premium_unlocked", "true");
-          location.reload();
-        },
-        onCancel: () => {
-          alert("キャンセルされました");
-        },
-        onError: (error) => {
-          alert("エラー: " + error.message);
-        }
+ <!-- Pi SDK -->
+<script src="https://sdk.minepi.com/v2/pi-sdk.js"></script>
+<script>
+  window.addEventListener('load', function() {
+    if (window.Pi) {
+      window.Pi.init({
+        version: "2.0",
+        sandbox: true,
+        redirectURI: window.location.origin
+      }).then(() => {
+        console.log("Pi SDK initialized!");
+      }).catch((error) => {
+        console.error("Pi SDK init error:", error);
       });
     }
-    </script>
+  });
+
+  function buyApp() {
+    if (!window.Pi) {
+      alert("Pi SDK が読み込まれていません。Pi Browser で開いてリロードしてください。");
+      return;
+    }
+    window.Pi.createPayment({
+      amount: 3.0,
+      memo: "Zen Verse Flip vol.1 - Full Access",
+      metadata: { 
+        developer: "Yuki36963",
+        app: "kotobabitoverse"
+      }
+    }, {
+      onReadyForServerApproval: (paymentId) => {
+        console.log("Payment ID:", paymentId);
+      },
+      onReadyForServerCompletion: (paymentId, txid) => {
+        alert("購入完了！全機能が解放されました！");
+        localStorage.setItem("premium_unlocked", "true");
+        location.reload();
+      },
+      onCancel: () => {
+        alert("キャンセルされました");
+      },
+      onError: (error) => {
+        alert("エラー: " + error.message);
+      }
+    });
+  }
+</script>
 
     <!-- React アプリ本体 -->
     <noscript>You need to enable JavaScript to run this app.</noscript>
