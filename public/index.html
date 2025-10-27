@@ -35,17 +35,20 @@
  <!-- Pi SDK -->
 <script src="https://sdk.minepi.com/v2/pi-sdk.js"></script>
 <script>
-  window.addEventListener('load', function() {
+  // Pi SDK 初期化（DOM ロードで実行）
+  document.addEventListener('DOMContentLoaded', function() {
     if (window.Pi) {
       window.Pi.init({
         version: "2.0",
-        sandbox: true,
-        redirectURI: window.location.origin
+        sandbox: false,  // Testnet でも false で安定
+        redirectURI: "pi://kotobabitoverse"  // 君の Subdomain に合わせる
       }).then(() => {
         console.log("Pi SDK initialized!");
       }).catch((error) => {
         console.error("Pi SDK init error:", error);
       });
+    } else {
+      console.error("Pi SDK not loaded");
     }
   });
 
@@ -66,7 +69,7 @@
         console.log("Payment ID:", paymentId);
       },
       onReadyForServerCompletion: (paymentId, txid) => {
-        alert("購入完了！全機能が解放されました！");
+        alert("購入完了！全機能が解放されました！🎉");
         localStorage.setItem("premium_unlocked", "true");
         location.reload();
       },
