@@ -1,43 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
+    <meta name="description" content="Zen Verse Flip vol.1 - 詩の世界を3 Piで解放" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+    <title>Zen Verse Flip vol.1</title>
   </head>
   <body>
+    <!-- 3 Pi 購入ボタン（Reactの上に表示） -->
+    <div style="text-align:center; margin:50px auto; max-width:400px;">
+      <button 
+        onclick="buyApp()" 
+        style="
+          padding:18px 36px; 
+          font-size:20px; 
+          background:#f0a500; 
+          color:white; 
+          border:none; 
+          border-radius:12px; 
+          box-shadow:0 4px 8px rgba(0,0,0,0.2);
+          cursor:pointer;
+        ">
+        3 Pi で全機能解放
+      </button>
+      <p style="margin-top:15px; font-size:14px; color:#666;">
+        購入後、詩の世界がフルオープン！
+      </p>
+    </div>
+
+    <!-- Pi SDK -->
+    <script src="https://sdk.minepi.com/v2/pi-sdk.js"></script>
+    <script>
+    function buyApp() {
+      if (!window.Pi) {
+        alert("Pi SDK が読み込まれていません。リロードしてください。");
+        return;
+      }
+      window.Pi.createPayment({
+        amount: 3.0,
+        memo: "Zen Verse Flip vol.1 - Full Access",
+        metadata: { 
+          developer: "Yuki36963",
+         625: "kotobabitoverse"
+        }
+      }, {
+        onReadyForServerApproval: (paymentId) => {
+          console.log("Payment ID:", paymentId);
+        },
+        onReadyForServerCompletion: (paymentId, txid) => {
+          alert("購入完了！全機能が解放されました！🎉");
+          // ここにアプリ解放処理（例: ローカル保存）
+          localStorage.setItem("premium_unlocked", "true");
+          location.reload();
+        },
+        onCancel: () => {
+          alert("キャンセルされました");
+        },
+        onError: (error) => {
+          alert("エラー: " + error.message);
+        }
+      });
+    }
+    </script>
+
+    <!-- React アプリ本体 -->
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!--
       This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
       The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
 </html>
