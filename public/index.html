@@ -1,38 +1,43 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Zen Verse Flip vol.1</title>
+    <title>Zen Verse Flip</title>
   </head>
   <body>
-    <!-- 決済ボタン -->
     <div style="text-align:center; margin:100px;">
       <button onclick="buyApp()" style="padding:20px 40px; font-size:24px; background:#f0a500; color:white; border:none; border-radius:12px;">
-        3 Pi で全機能解放
+        Open your Zen world for 3 Pi
       </button>
     </div>
 
     <!-- Pi SDK -->
-    <script src="https://sdk.minepi.com/v2/pi-sdk.js"></script>
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <script>
-    function buyApp() {
-      if (!window.Pi) {
-        alert("Pi Browser で開いてください");
-        return;
-      }
-      window.Pi.createPayment({
-        amount: 3.0,
-        memo: "Test Payment",
-        metadata: { developer: "Yuki36963" }
-      }, {
-        onReadyForServerCompletion: () => {
-          alert("テスト決済成功！");
-          location.reload();
+      // SDK 初期化
+      Pi.init({ version: "2.0", sandbox: false });
+
+      async function buyApp() {
+        if (!window.Pi) {
+          alert("Please open this in Pi Browser");
+          return;
         }
-      });
-    }
+
+        try {
+          const payment = await Pi.createPayment({
+            amount: 3.0,
+            memo: "Zen Verse Flip purchase",
+            metadata: { developer: "Yuki36963" },
+          });
+          console.log("Payment successful:", payment);
+          alert("Payment completed! Thank you ✨");
+        } catch (error) {
+          console.error(error);
+          alert("Payment failed or was canceled.");
+        }
+      }
     </script>
 
     <div id="root"></div>
