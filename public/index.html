@@ -82,13 +82,16 @@
       const authenticated = await authenticateUser();
       if (!authenticated) return;
 
+      let currentPaymentId; // paymentId を保存する変数
+
       try {
-        const payment = await window.Pi.createPayment({
+        await window.Pi.createPayment({
           amount: 0.01,
           memo: "Free app checklist test"
         }, {
           onReadyForServerApproval: async (paymentId) => {
             console.log("承認待ち:", paymentId);
+            currentPaymentId = paymentId; // 保存！
             // 【ハック】Sandboxで即完了通知！
             await window.Pi.completePayment(paymentId, { txid: "sandbox_txid_" + Date.now() });
           },
