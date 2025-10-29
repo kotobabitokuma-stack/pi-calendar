@@ -3,6 +3,21 @@
   <head>
     <meta charset="utf-8" />
     <title>Zen Verse Flip</title>
+    <style>
+      body { margin: 0; padding: 0 0 100px; font-family: sans-serif; text-align: center; }
+      /* 下部固定広告枠 */
+      #banner-ad {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background: #eee;
+        line-height: 60px;
+        border-top: 1px solid #ccc;
+        z-index: 100;
+      }
+    </style>
   </head>
   <body>
     <!-- 元の決済ボタンはコメントアウト -->
@@ -42,8 +57,20 @@
         }
       }
       */
+
+      // 仮のバナー広告表示
+      window.addEventListener('DOMContentLoaded', () => {
+        const banner = document.getElementById('banner-ad');
+        if (banner) {
+          banner.textContent = 'ここにバナー広告が表示されます';
+          // 実際の広告コードに差し替え可能
+        }
+      });
     </script>
 
     <div id="root"></div>
+
+    <!-- 下部固定バナー広告枠 -->
+    <div id="banner-ad"></div>
   </body>
 </html>
