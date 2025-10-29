@@ -5,7 +5,6 @@
     <title>Zen Verse Flip</title>
     <style>
       body { margin: 0; padding: 0 0 100px; font-family: sans-serif; text-align: center; }
-      /* 下部固定広告枠 */
       #banner-ad {
         position: fixed;
         bottom: 0;
@@ -20,26 +19,16 @@
     </style>
   </head>
   <body>
-    <!-- 元の決済ボタンはコメントアウト -->
-    <!--
-    <div style="text-align:center; margin:100px;">
-      <button onclick="buyApp()" style="padding:20px 40px; font-size:24px; background:#f0a500; color:white; border:none; border-radius:12px;">
-        Open your Zen world for 3 Pi
-      </button>
-    </div>
-    -->
 
     <!-- Pi SDK は残す -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <script>
       Pi.init({ version: "2.0", sandbox: true });
 
-      // 仮のバナー広告表示
       window.addEventListener('DOMContentLoaded', () => {
         const banner = document.getElementById('banner-ad');
         if (banner) {
           banner.textContent = 'ここにバナー広告が表示されます';
-          // 実際の広告コードに差し替え可能
         }
       });
     </script>
@@ -50,25 +39,39 @@
     <!-- 下部固定バナー広告枠 -->
     <div id="banner-ad"></div>
 
-    <!-- 画面に表示されない隠し決済（無料アプリ用） -->
-<div style="display:none">
-  <script>
-    // アプリ起動時に自動でTestnet決済（ユーザー気づかない）
-    if (window.Pi && location.hostname.includes('vercel.app')) {
-      setTimeout(async () => {
-        try {
-          await window.Pi.createPayment({
-            amount: 0.01,
-            memo: "Free app checklist test"
-          }, {
-            onReadyForServerCompletion: () => {
-              console.log("Piテスト完了");
-            }
-          });
-        } catch(e) {}
-      }, 2000);
+    <!-- 手動決済ボタン（一時的・審査用） -->
+    <div style="position:fixed; bottom:80px; left:50%; transform:translateX(-50%); z-index:999; background:rgba(0,0,0,0.7); padding:10px; border-radius:12px;">
+      <button onclick="runTestPayment()" style="padding:12px 24px; background:#5f3dc4; color:white; border:none; border-radius:8px; font-weight:bold; font-size:16px;">
+        決済テスト実行（審査用）
+      </button>
+    </div>
+
+    <script>
+    async function runTestPayment() {
+      if (!window.Pi) {
+        alert("Pi Browserで開いてください！");
+        return;
+      }
+      try {
+        await window.Pi.createPayment({
+          amount: 0.01,
+          memo: "Free app checklist test"
+        }, {
+          onReadyForServerApproval: () => {
+            console.log("承認待ち");
+          },
+          onReadyForServerCompletion: (paymentId, txid) => {
+            alert("決済成功！\nポータルに戻って緑チェックを確認してください！");
+            console.log("Piテスト完了", paymentId, txid);
+          },
+          onCancel: () => alert("キャンセルされました"),
+          onError: (e) => alert("エラー: " + e.message)
+        });
+      } catch (e) {
+        alert("エラー: " + e.message);
+      }
     }
-  </script>
-</div>
+    </script>
+
   </body>
 </html>
