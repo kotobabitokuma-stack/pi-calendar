@@ -2,23 +2,26 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Zen Verse Flip</title>
   </head>
   <body>
+    <!-- 元の決済ボタンはコメントアウト -->
+    <!--
     <div style="text-align:center; margin:100px;">
       <button onclick="buyApp()" style="padding:20px 40px; font-size:24px; background:#f0a500; color:white; border:none; border-radius:12px;">
         Open your Zen world for 3 Pi
       </button>
     </div>
+    -->
 
-    <!-- Pi SDK -->
+    <!-- Pi SDK は残す -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <script>
-      // SDK 初期化
+      // SDK 初期化は残す
       Pi.init({ version: "2.0", sandbox: true });
 
+      /*
+      // 決済処理関数をコメントアウト
       async function buyApp() {
         if (!window.Pi) {
           alert("Please open this in Pi Browser");
@@ -38,6 +41,7 @@
           alert("Payment failed or was canceled.");
         }
       }
+      */
     </script>
 
     <div id="root"></div>
