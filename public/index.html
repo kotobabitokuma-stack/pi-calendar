@@ -25,11 +25,38 @@
     <script>
       Pi.init({ version: "2.0", sandbox: true });
 
+      // 認証関数（paymentsスコープで決済許可をもらう）
+      async function authenticateUser() {
+        if (!window.Pi) {
+          alert("Pi Browserで開いてください！");
+          return false;
+        }
+        try {
+          const scopes = ['payments']; // 決済スコープ必須！
+          await Pi.authenticate(scopes, onIncompletePaymentFound);
+          console.log("認証成功！決済OK！");
+          return true;
+        } catch (error) {
+          alert("認証エラー: " + error.message);
+          console.error(error);
+          return false;
+        }
+      }
+
+      // 未完了決済のコールバック（Pi SDK必須）
+      function onIncompletePaymentFound(payment) {
+        console.log("未完了決済発見:", payment);
+        // テストなので何もしない
+      }
+
+      // 仮のバナー広告表示
       window.addEventListener('DOMContentLoaded', () => {
         const banner = document.getElementById('banner-ad');
         if (banner) {
           banner.textContent = 'ここにバナー広告が表示されます';
         }
+        // ページロード時に自動認証
+        authenticateUser();
       });
     </script>
 
@@ -52,13 +79,19 @@
         alert("Pi Browserで開いてください！");
         return;
       }
+      // 認証確認（念のため）
+      const authenticated = await authenticateUser();
+      if (!authenticated) {
+        return;
+      }
       try {
         await window.Pi.createPayment({
           amount: 0.01,
           memo: "Free app checklist test"
         }, {
-          onReadyForServerApproval: () => {
-            console.log("承認待ち");
+          onReadyForServerApproval: (paymentId) => {
+            console.log("承認待ち:", paymentId);
+            // テストなのでサーバー承認スキップ（Sandbox OK）
           },
           onReadyForServerCompletion: (paymentId, txid) => {
             alert("決済成功！\nポータルに戻って緑チェックを確認してください！");
