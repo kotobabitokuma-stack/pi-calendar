@@ -20,57 +20,16 @@
     </style>
   </head>
   <body>
-    <!-- 元の決済ボタンはコメントアウト -->
-    <!--
-    <div style="text-align:center; margin:100px;">
-      <button onclick="buyApp()" style="padding:20px 40px; font-size:24px; background:#f0a500; color:white; border:none; border-radius:12px;">
-        Open your Zen world for 3 Pi
-      </button>
-    </div>
-    -->
+    <!-- React が描画するエリア -->
+    <div id="root"></div>
+
+    <!-- 下部固定バナー広告枠 -->
+    <div id="banner-ad">ここにバナー広告が表示されます</div>
 
     <!-- Pi SDK は残す -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <script>
-      // SDK 初期化は残す
       Pi.init({ version: "2.0", sandbox: true });
-
-      /*
-      // 決済処理関数はコメントアウト
-      async function buyApp() {
-        if (!window.Pi) {
-          alert("Please open this in Pi Browser");
-          return;
-        }
-
-        try {
-          const payment = await Pi.createPayment({
-            amount: 3.0,
-            memo: "Zen Verse Flip purchase",
-            metadata: { developer: "Yuki36963" },
-          });
-          console.log("Payment successful:", payment);
-          alert("Payment completed! Thank you ✨");
-        } catch (error) {
-          console.error(error);
-          alert("Payment failed or was canceled.");
-        }
-      }
-      */
-
-      // 仮のバナー広告表示
-      window.addEventListener('DOMContentLoaded', () => {
-        const banner = document.getElementById('banner-ad');
-        if (banner) {
-          banner.textContent = 'ここにバナー広告が表示されます';
-          // 実際の広告コードに差し替え可能
-        }
-      });
     </script>
-
-    <div id="root"></div>
-
-    <!-- 下部固定バナー広告枠 -->
-    <div id="banner-ad"></div>
   </body>
 </html>
