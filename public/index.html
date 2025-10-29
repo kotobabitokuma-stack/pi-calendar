@@ -73,26 +73,22 @@
       </button>
     </div>
 
-    <script>
+      <script>
     async function runTestPayment() {
       if (!window.Pi) {
         alert("Pi Browserで開いてください！");
         return;
       }
-      // 認証確認（念のため）
       const authenticated = await authenticateUser();
-      if (!authenticated) {
-        return;
-      }
+      if (!authenticated) return;
+
       try {
         await window.Pi.createPayment({
           amount: 0.01,
           memo: "Free app checklist test"
         }, {
-          onReadyForServerApproval: (paymentId) => {
-            console.log("承認待ち:", paymentId);
-            // テストなのでサーバー承認スキップ（Sandbox OK）
-          },
+          // Sandboxではサーバー承認不要 → 空関数
+          onReadyForServerApproval: () => {}, 
           onReadyForServerCompletion: (paymentId, txid) => {
             alert("決済成功！\nポータルに戻って緑チェックを確認してください！");
             console.log("Piテスト完了", paymentId, txid);
