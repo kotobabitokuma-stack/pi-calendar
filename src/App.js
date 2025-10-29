@@ -394,47 +394,40 @@ if (selectedDay === null) {
   )}
 </div>
 
-      {/* ナビゲーション */}
-      <div style={{
+{/* ナビゲーション */}
+<div style={{
   position: "fixed",
-  bottom: "20px",
+  bottom: "80px",       // 広告バナーの上に表示
   left: 0,
   width: "100%",
   display: "flex",
   justifyContent: "space-between",
-  padding: "0 12px", // 少し余白
-  boxSizing: "border-box" // ← これ重要
+  padding: "0 12px",
+  boxSizing: "border-box",
+  zIndex: 200           // 広告より前面に表示
 }}>
   {/* 左 */}
   <div style={{ flex: 1, display: "flex", justifyContent: "flex-start" }}>
-    <button onClick={() => { setSelectedDayIndex(null); setShowText(false); }} style={buttonStyle}>
+    <button
+      onClick={() => { setSelectedDayIndex(null); setShowText(false); }}
+      style={buttonStyle}
+    >
       All Days
     </button>
   </div>
 
-  {/* 中央 */}
-  <div style={{ flex: 1, display: "flex", justifyContent: "center", gap: "10px" }}>
-    {selectedDayIndex > 1 && (
-      <button onClick={() => { setSelectedDayIndex(selectedDayIndex - 1); setShowText(false); }} style={buttonStyle}>
-        Previous
-      </button>
-    )}
-    {selectedDayIndex < days.length - 1 && (
-      <button onClick={() => { setSelectedDayIndex(selectedDayIndex + 1); setShowText(false); }} style={buttonStyle}>
-        Next
-      </button>
-    )}
-  </div>
-
   {/* 右 */}
   <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
-    <button onClick={() => { setSelectedDayIndex(null); setShowText(false); setIsTop(true); }} style={buttonStyle}>
+    <button
+      onClick={() => { setSelectedDayIndex(null); setShowText(false); setIsTop(true); }}
+      style={buttonStyle}
+    >
       Top
     </button>
   </div>
 </div>
 
-      <PiUserBadge user={user} />
+<PiUserBadge user={user} />
     </div>
   );
 }
