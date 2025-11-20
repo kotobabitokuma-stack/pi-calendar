@@ -23,7 +23,7 @@
     <!-- Pi SDK は残す -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <script>
-      Pi.init({ version: "2.0", sandbox: true });
+      Pi.init({ version: "2.0" });
 
       // 認証関数（paymentsスコープで決済許可をもらう）
       async function authenticateUser() {
@@ -75,36 +75,50 @@
 
     <script>
     async function runTestPayment() {
-      if (!window.Pi) {
-        alert("Pi Browserで開いてください！");
-        return;
+  if (!window.Pi) {
+    alert("Pi Browserで開いてください！");
+    return;
+  }
+
+  const authenticated = await authenticateUser();
+  if (!authenticated) return;
+
+  try {
+    Pi.createPayment(
+      {
+        amount: 0,                                                   // ← ここを0に！
+        memo: "Zen Verse Flip - 今日の禅の言葉（無料アクセス）",         // ← memo必須
+        metadata: { app: "zen_verse_flip", purpose: "free_daily_access" }  // ← metadata必須
+      },
+      {
+        // これら4つのコールバックは全部書く必要あり（空でもOK）
+        onReadyForServerApproval(paymentId) {
+          console.log("サーバー承認待ち（0 Piなのでほぼ即通過）", paymentId);
+          // 0 Piは自動承認されるので何もしない
+        },
+
+        onReadyForServerCompletion(paymentId, txid) {
+          console.log("無料決済完了！Checklistが緑になります");
+          alert("決済成功！\nポータルに戻ってChecklistを確認してください！");
+          // ← ここで日めくりを表示したいなら君の関数呼び出しを追加
+          // 例：showTodaysVerse();
+        },
+
+        onCancel(paymentId) {
+          console.log("キャンセルされました", paymentId);
+          alert("無料アクセスを許可してください");
+        },
+
+        onError(error, payment) {
+          console.error("決済エラー", error);
+          alert("エラー: " + error.message);
+        }
       }
-      const authenticated = await authenticateUser();
-      if (!authenticated) return;
-
-      try {
-        // 決済作成（コールバックは空）
-        const payment = await window.Pi.createPayment({
-          amount: 0.01,
-          memo: "Free app test"
-        }, {
-          onReadyForServerApproval: () => {},
-          onReadyForServerCompletion: () => {},
-          onCancel: () => {},
-          onError: () => {}
-        });
-
-        // 即完了通知（Sandboxハック）
-        const paymentId = payment.identifier;
-        await window.Pi.completePayment(paymentId, { txid: "sandbox_txid_" + Date.now() });
-
-        alert("決済成功！\nポータルに戻って緑チェックを確認してください！");
-        console.log("Piテスト完了", paymentId);
-      } catch (e) {
-        alert("エラー: " + e.message);
-      }
-    }
-    </script>
-
+    );
+  } catch (e) {
+    alert("予期せぬエラー: " + e.message);
+  }
+}
+} 
   </body>
 </html>
