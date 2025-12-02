@@ -23,9 +23,9 @@
         <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
         <script>
-      
-      // App Studioで取得した新しいApp IDを設定
-      Pi.init({ version: "2.0", api_key: "zenverseflipvola9193" });
+      
+      // ⭐⭐⭐ App ID を Develop Portal の Slug に修正しました！ ⭐⭐⭐
+      Pi.init({ version: "2.0", api_key: "zen-verse-flip-vol-1-aff488a9804cc5e0" }); // ← 修正済み！
 
             async function authenticateUser() {
         if (!window.Pi) {
@@ -100,6 +100,7 @@ onReadyForServerCompletion: function(paymentId, txid) {
 },
           // ← ここで日めくりを表示したいなら君の関数呼び出しを追加
           // 例：showTodaysVerse();
+          // 実際の日めくり表示コードをここに追加してね
         },
 
         onCancel(paymentId) {
