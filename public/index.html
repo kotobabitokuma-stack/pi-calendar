@@ -23,7 +23,8 @@
     <!-- Pi SDK は残す -->
  　  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <script>
- 　　 window.Pi.init({ version: "2.0" });
+ 　　// index.html の書き換え後のコード
+Pi.init({ version: "2.0", api_key: "zenverseflipvola9193" });
 　　 </script>
       // 認証関数（paymentsスコープで決済許可をもらう）
       async function authenticateUser() {
