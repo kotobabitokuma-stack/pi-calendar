@@ -24,8 +24,8 @@
 
         <script>
       
-      // ⭐⭐⭐ 最終修正: api_key を appId に変更しました！ ⭐⭐⭐
-      Pi.init({ version: "2.0", appId: "zen-verse-flip-vol-1-aff488a9804cc5e0" }); // ← ここが最後の修正点！
+      // ⭐ App IDと変数名を最終修正済み！
+      Pi.init({ version: "2.0", appId: "zen-verse-flip-vol-1-aff488a9804cc5e0" });
 
             async function authenticateUser() {
         if (!window.Pi) {
@@ -80,25 +80,18 @@
   if (!authenticated) return;
 
   try {
+    // ⭐ コールバックを純粋なクライアントサイド決済 (frontend) 用に単純化済み ⭐
     Pi.createPayment(
       {
-        amount: 0,                                                   // ← ここを0に！
-        memo: "Zen Verse Flip - 今日の禅の言葉（無料アクセス）",         // ← memo必須
-        metadata: { app: "zen_verse_flip", purpose: "free_daily_access" }  // ← metadata必須
+        amount: 0,                                                   // 0 Pi
+        memo: "Zen Verse Flip - 今日の禅の言葉（無料アクセス）",         // memo必須
+        metadata: { app: "zen_verse_flip", purpose: "free_daily_access" }  
       },
       {
-        // これら4つのコールバックは全部書く必要あり（空でもOK）
-        onReadyForServerApproval(paymentId) {
-          console.log("サーバー承認待ち（0 Piなのでほぼ即通過）", paymentId);
-          // 0 Piは自動承認されるので何もしない
-        },
-
-onReadyForServerCompletion: function(paymentId, txid) {
-  console.log("無料決済完了！", paymentId, txid);
-  Pi.completePayment(paymentId, txid);
-  alert("決済成功！ポータルに戻ってChecklistを確認してください！");
-},
-          // 実際の日めくり表示コードをここに追加してね
+        onComplete: function(paymentId, txid) {
+          console.log("無料決済完了！", paymentId, txid);
+          Pi.completePayment(paymentId, txid);
+          alert("決済成功！ポータルに戻ってChecklistを確認してください！");
         },
 
         onCancel(paymentId) {
