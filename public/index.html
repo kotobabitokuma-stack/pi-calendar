@@ -24,8 +24,8 @@
 
         <script>
       
-      // ⭐⭐⭐ App ID を Develop Portal の Slug に修正しました！ ⭐⭐⭐
-      Pi.init({ version: "2.0", api_key: "zen-verse-flip-vol-1-aff488a9804cc5e0" }); // ← 修正済み！
+      // ⭐⭐⭐ 最終修正: api_key を appId に変更しました！ ⭐⭐⭐
+      Pi.init({ version: "2.0", appId: "zen-verse-flip-vol-1-aff488a9804cc5e0" }); // ← ここが最後の修正点！
 
             async function authenticateUser() {
         if (!window.Pi) {
@@ -98,8 +98,6 @@ onReadyForServerCompletion: function(paymentId, txid) {
   Pi.completePayment(paymentId, txid);
   alert("決済成功！ポータルに戻ってChecklistを確認してください！");
 },
-          // ← ここで日めくりを表示したいなら君の関数呼び出しを追加
-          // 例：showTodaysVerse();
           // 実際の日めくり表示コードをここに追加してね
         },
 
