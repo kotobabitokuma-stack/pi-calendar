@@ -7,7 +7,7 @@ ORG_DESCRIPTION = "A project to cherish your own 'likes' and the 'likes' of othe
 
 [[CURRENCIES]]
 code = "KBK"
-issuer = "GAG5S3G2V2562U3K5EYO4V3C65G67K5T6XW77N5B5M5O7N7S7H7O7I"
+issuer = "GAG5643HGJSSYNGJCSKOT432LZDTJK6OC7DK5PPPEYCCOMYST7LSSHOI"
 display_decimals = 7
 name = "Kotonoha Bridge Key"
 desc = "1. Respect your own 'likes' and others' 'likes'. 2. Create a peaceful, warm place together. 3. Enable Metaverse construction and real-world cafe usage."
